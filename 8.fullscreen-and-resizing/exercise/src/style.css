@@ -1,0 +1,21 @@
+/* *
+{
+    margin: 0;
+    padding: 0;
+} */
+
+html, body
+{
+    /* Avoid scrolling beyond the limit of the screen with a trackpad */
+    overflow: hidden;
+}
+
+/* Style to get an immersive canvas on fullscreen */
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Disactivate the blue border when drag and drop */
+    outline: 0;
+}

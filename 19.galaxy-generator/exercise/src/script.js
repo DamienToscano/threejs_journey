@@ -1,0 +1,278 @@
+import './style.css'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import * as dat from 'lil-gui'
+
+/**
+ * Base
+ */
+// Debug
+const gui = new dat.GUI()
+
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+// Scene
+const scene = new THREE.Scene()
+
+/**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+const particleTexture = textureLoader.load('textures/particles/5.png')
+
+/**
+ * Galaxy
+ */
+// For debug panel settings
+const parameters = {}
+parameters.count = 70000
+parameters.size = 0.1
+parameters.radius = 5
+parameters.radiusPower = 2
+parameters.branches = 3
+parameters.spin = 1
+parameters.randomnessPower = 2.5
+parameters.insideColor = '#ff6030'
+parameters.outsideColor = '#1b3984'
+parameters.rotation = 0.2
+parameters.oscillation = 0.3
+parameters.height = 0.4
+
+let geometry = null
+let material = null
+let points = null
+
+const generateGalaxy = () =>
+{
+    // Destroy all galaxies
+    if (points !== null) {
+        // Free the memory for geometry and material
+        geometry.dispose()
+        material.dispose()
+        // Remove points for the scene
+        scene.remove(points)
+    }
+
+    /**
+     * Geometry
+     */
+    geometry = new THREE.BufferGeometry()
+
+    // Configuring position attributes
+    const positions = new Float32Array(parameters.count * 3)
+
+    // Configuring color attributes
+    const colors = new Float32Array(parameters.count * 3)
+
+    // Instantiate the colors
+    const insideColor = new THREE.Color(parameters.insideColor)
+    const outsideColor = new THREE.Color(parameters.outsideColor)
+
+    console.log(insideColor, outsideColor)
+
+    for (let i = 0; i < parameters.count; i++) {
+        const i3 = i * 3
+
+        // Olf version with random values
+        // positions[i3] = (Math.random() - 0.5) * 3
+        // positions[i3 + 1] = (Math.random() - 0.5) * 3
+        // positions[i3 + 2] = (Math.random() - 0.5) * 3
+
+        // Dispose points on a galaxy shapes
+        // Particles repartition along the branch according to radius power
+        const radius = Math.pow(Math.random(), parameters.radiusPower) * parameters.radius
+        // Calculate spin angle for this particle
+        const spinAngle = radius * parameters.spin
+
+        // Dispatch points on separate branches
+        // Divided by branches number to have a value between 0 and 1
+        // * by PI * 2 to have circle angles
+        const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
+
+        // Setting randomness on the particles
+        // Use pow to get exponential effect, more particles on low distances, and more on center of the branches
+        const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1)
+        const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? parameters.height : -parameters.height)
+        const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1)
+
+        positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX
+        positions[i3 + 1] = randomY + (Math.random() < 0.4 ? randomY * 0.2 : 0)
+        positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
+
+        // Color
+        // Lerp (Converge from one value to another) a clone of the colorInside value (A clone to avoid changing the original value)
+        const mixedColor = insideColor.clone().lerp(outsideColor, radius / parameters.radius)
+
+        colors[i3] = mixedColor.r
+        colors[i3 + 1] = mixedColor.g
+        colors[i3 + 2] = mixedColor.b
+    }
+    
+    // Add attribute position
+    geometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3)
+    )
+
+    // Add attribute color
+    geometry.setAttribute(
+        'color',
+        new THREE.BufferAttribute(colors, 3)
+    )
+
+    /**
+     * Material
+     */
+    material = new THREE.PointsMaterial({
+        size: parameters.size,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        // Activate colors
+        vertexColors: true,
+        // Texture
+        transparent: true,
+        alphaMap: particleTexture,
+    })
+
+    /**
+     * Points
+     */
+    points = new THREE.Points(geometry, material)
+    console.log(points)
+    scene.add(points)
+}
+
+// Call the generation function
+generateGalaxy()
+
+// Set the gui parameters
+// And generate the galay again
+gui.add(parameters, 'count').min(100).max(100000).step(100).onFinishChange(generateGalaxy)
+gui.add(parameters, 'size').min(0.001).max(0.2).step(0.001).onFinishChange(generateGalaxy)
+gui.add(parameters, 'radius').min(0.01).max(20).step(0.01).onFinishChange(generateGalaxy)
+gui.add(parameters, 'radiusPower').min(1).max(6).step(0.1).onFinishChange(generateGalaxy)
+gui.add(parameters, 'branches').min(2).max(20).step(1).onFinishChange(generateGalaxy)
+gui.add(parameters, 'spin').min(-5).max(5).step(0.5).onFinishChange(generateGalaxy)
+gui.add(parameters, 'randomnessPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy)
+gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
+gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
+gui.add(parameters, 'rotation').min(0.1).max(2).step(0.1).onFinishChange(generateGalaxy)
+gui.add(parameters, 'oscillation').min(0.1).max(2).step(0.1).onFinishChange(generateGalaxy)
+gui.add(parameters, 'height').min(0.1).max(1).step(0.1).onFinishChange(generateGalaxy)
+gui.close()
+
+/**
+ * Background stars
+ */
+parameters.backgroundCount = 1000
+parameters.backgroundColor = '#fff4ad'
+parameters.backgroundSize = 0.3
+
+const backgroundGeometry = new THREE.BufferGeometry()
+const backgroundPositions = new Float32Array(parameters.backgroundCount * 3)
+for (let i = 0; i < parameters.count; i++) {
+    const i3 = i * 3
+
+    // X
+    backgroundPositions[i3] = (Math.random() -0.5) * 100
+    // Y
+    backgroundPositions[i3 + 1] = (Math.random() -0.5) * 100
+    // Z
+    backgroundPositions[i3 + 2] = (Math.random() -0.5) * 100
+}
+
+// Set geometry
+backgroundGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(backgroundPositions, 3)
+)
+
+// Set material
+const backgroundMaterial = new THREE.PointsMaterial({
+    size: parameters.backgroundSize,
+    sizeAttenuation: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    color: parameters.backgroundColor,
+    // Texture
+    transparent: true,
+    alphaMap: particleTexture,
+})
+
+// Set points
+const backgroundPoints = new THREE.Points(backgroundGeometry, backgroundMaterial)
+scene.add(backgroundPoints)
+
+/**
+ * Sizes
+ */
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+
+/**
+ * Camera
+ */
+// Base camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera.position.x = 3
+camera.position.y = 3
+camera.position.z = 10
+scene.add(camera)
+
+// Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+/**
+ * Renderer
+ */
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+/**
+ * Animate
+ */
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Rotate galaxy
+    points.rotation.x = Math.sin(elapsedTime * 0.2) * parameters.oscillation
+    points.rotation.y = elapsedTime * parameters.rotation
+    points.rotation.z = Math.cos(elapsedTime * 0.2) * parameters.oscillation
+
+    // Update controls
+    controls.update()
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()
