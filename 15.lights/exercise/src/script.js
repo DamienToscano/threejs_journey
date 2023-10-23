@@ -8,7 +8,7 @@ import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHel
  * Base
  */
 // Debug
-const gui = new dat.GUI()
+// const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -56,7 +56,9 @@ const rectAreaLight = new THREE.RectAreaLight(0x4c00ff, 2, 3, 3)
 // Move it and make it look at the center of the scene
 rectAreaLight.position.set(-1.5, 0, 1.5)
 rectAreaLight.lookAt(new THREE.Vector3())
+// TODO:
 scene.add(rectAreaLight)
+
 
 // SpotLight
 // Like a flashlight
@@ -100,6 +102,7 @@ scene.add(rectAreaLight)
 
 const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
 // Helper can also be added as a child of the light and not the scene
+// TODO:
 rectAreaLight.add(rectAreaLightHelper)
 
 
@@ -111,7 +114,7 @@ rectAreaLight.add(rectAreaLightHelper)
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.4
 
-gui.add(material, 'roughness', 0, 1, 0.01);
+// gui.add(material, 'roughness', 0, 1, 0.01);
 
 
 // Objects
@@ -139,7 +142,10 @@ const plane = new THREE.Mesh(
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.65
 
-scene.add(sphere, cube, torus, plane)
+scene.add(plane)
+scene.add(sphere)
+scene.add(cube)
+scene.add(torus)
 
 /**
  * Sizes

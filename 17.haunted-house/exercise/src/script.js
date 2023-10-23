@@ -96,6 +96,7 @@ grassRoughnessTexture.wrapT = THREE.RepeatWrapping
 
 // Create group
 const house = new THREE.Group()
+// 
 scene.add(house)
 
 // Create the walls
@@ -178,6 +179,7 @@ house.add(bush1, bush2, bush3, bush4)
 
 // Graves
 const graves = new THREE.Group()
+// 
 scene.add(graves)
 
 const graveGeometry = new THREE.BoxBufferGeometry(0.6, 0.8, 0.2)
@@ -216,18 +218,19 @@ const floor = new THREE.Mesh(
 floor.geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(floor.geometry.attributes.uv.array, 2))
 floor.rotation.x = - Math.PI * 0.5
 floor.position.y = 0
+// 
 scene.add(floor)
 
 /**
  * Lights
  */
 // Ambient light
-const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.12)
+const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.25)
 // gui.add(ambientLight, 'intensity').min(0).max(1).step(0.001).name('Ambient light')
 scene.add(ambientLight)
 
 // Directional light
-const moonLight = new THREE.DirectionalLight('#b9d5ff', 0.12)
+const moonLight = new THREE.DirectionalLight('#b9d5ff', 0.25)
 moonLight.position.set(4, 5, - 2)
 // gui.add(moonLight, 'intensity').min(0).max(5).step(0.001)
 // gui.add(moonLight.position, 'x').min(- 5).max(5).step(0.001)
@@ -247,6 +250,7 @@ const ghost2 = new THREE.PointLight('#00ffff', 2, 3)
 const ghost3 = new THREE.PointLight('#ffff00', 2, 3)
 const cameraGhost = new THREE.PointLight('#ffffff', 2, 2)
 
+// 
 scene.add(ghost1, ghost2, ghost3, cameraGhost)
 
 /**
@@ -383,6 +387,7 @@ const tick = () =>
     ghost3.position.y = Math.sin(elapsedTime * 4) + Math.sin(elapsedTime * 2.5)
 
     // Make door light unstable
+    // 
     if (Math.random() > 0.95) {
         doorLight.intensity = 0.1
     } else {
@@ -390,6 +395,7 @@ const tick = () =>
     }
 
     // Strike light effect
+    // 
     if (Math.random() > 0.998) {
         moonLight.intensity = 5
         thunder.play()
@@ -401,6 +407,7 @@ const tick = () =>
     // controls.update()
 
     // Move camera like a ghost
+    // 
     const cameraAngle = elapsedTime * 0.2
     camera.position.x = Math.cos(cameraAngle) * (10 + Math.sin(elapsedTime * 0.32))
     camera.position.z = Math.sin(cameraAngle) * (10 + Math.sin(elapsedTime * 0.32))

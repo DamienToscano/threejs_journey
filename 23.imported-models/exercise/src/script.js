@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 // Get the Draco loader
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+// Text geometry
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import * as dat from 'lil-gui'
 
 /**
@@ -81,7 +83,7 @@ gltfLoader.setDRACOLoader(dracoLoader)
     }
 ) */
 // Helmet
-gltfLoader.load(
+/* gltfLoader.load(
     './models/FlightHelmet/glTF/FlightHelmet.gltf',
     (gltf) =>
     {
@@ -98,25 +100,47 @@ gltfLoader.load(
         // We can also add all the scene
         scene.add(gltf.scene)
     }
-)
+) */
 // Fox
 let mixer = null
-/* gltfLoader.load(
-    './models/Fox/glTF/Fox.gltf',
+// gltfLoader.load(
+//     './models/Fox/glTF/Fox.gltf',
+//     (gltf) =>
+//     {
+//         // We need a mixer to play the animations
+//         // We need to tell the mixer to update itself on the tick function
+//         mixer = new THREE.AnimationMixer(gltf.scene)
+//         // Get the action
+//         const action = mixer.clipAction(gltf.animations[1])
+//         // Play the action
+//         action.play()
+//         // Add the model to the scene
+//         gltf.scene.scale.set(0.025, 0.025, 0.025)
+//         scene.add(gltf.scene)
+//     }
+// )
+
+// Me
+// gltfLoader.load(
+//     './models/Me/glTF-Binary/Me.glb',
+//     (gltf) =>
+//     {
+//         scene.add(gltf.scene.children[0])
+//     }
+// )
+gltfLoader.load(
+    './models/Rhinos/glTF-Binary/Rhinoceros.glb',
     (gltf) =>
     {
-        // We need a mixer to play the animations
-        // We need to tell the mixer to update itself on the tick function
-        mixer = new THREE.AnimationMixer(gltf.scene)
-        // Get the action
-        const action = mixer.clipAction(gltf.animations[1])
-        // Play the action
-        action.play()
-        // Add the model to the scene
-        gltf.scene.scale.set(0.025, 0.025, 0.025)
-        scene.add(gltf.scene)
+        let model = gltf.scene.children[0]
+        model.scale.set(0.01, 0.01, 0.01)
+        model.position.set(0, + 0.8, 0)
+        console.log(model)
+        model.material.color = new THREE.Color(0xff0000)
+
+        scene.add(model)
     }
-) */
+)
 
 /**
  * Floor
@@ -194,6 +218,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap
+renderer.setClearColor('#ffffff')
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 

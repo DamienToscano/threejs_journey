@@ -45,7 +45,14 @@ const mesh = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
     new THREE.MeshBasicMaterial({ color: 0xff0000 })
 )
-scene.add(mesh)
+// scene.add(mesh)
+
+const geometry = new THREE.SphereGeometry( 1, 32, 32 ); 
+const material = new THREE.MeshBasicMaterial( { color: 'yellow' } ); 
+const sphere = new THREE.Mesh( geometry );
+scene.add(sphere);
+
+console.log(sphere);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
@@ -92,7 +99,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    // mesh.rotation.y = elapsedTime;
+    mesh.rotation.y = elapsedTime;
 
     // Update camera position on each frame
     // We want to be able to move the camera around the cube

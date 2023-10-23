@@ -69,29 +69,29 @@ const color_texture = texture_loader.load(
 );
 
 // Add more textures
-// const alpha_texture = texture_loader.load('/textures/door/alpha.jpg');
-// const height_texture = texture_loader.load('/textures/door/height.jpg');
-// const normal_texture = texture_loader.load('/textures/door/normal.jpg');
-// const ambient_occlusion_texture = texture_loader.load('/textures/door/ambientOcclusion.jpg');
-// const metalness_texture = texture_loader.load('/textures/door/metalness.jpg');
-// const roughness_texture = texture_loader.load('/textures/door/roughness.jpg');
+const alpha_texture = texture_loader.load('/textures/door/alpha.jpg');
+const height_texture = texture_loader.load('/textures/door/height.jpg');
+const normal_texture = texture_loader.load('/textures/door/normal.jpg');
+const ambient_occlusion_texture = texture_loader.load('/textures/door/ambientOcclusion.jpg');
+const metalness_texture = texture_loader.load('/textures/door/metalness.jpg');
+const roughness_texture = texture_loader.load('/textures/door/roughness.jpg');
 
 // Transform textures
-// color_texture.repeat.set(2, 3);
-// color_texture.wrapS = THREE.MirroredRepeatWrapping;
-// color_texture.wrapT = THREE.RepeatWrapping;
+color_texture.repeat.set(2, 3);
+color_texture.wrapS = THREE.MirroredRepeatWrapping;
+color_texture.wrapT = THREE.RepeatWrapping;
 
-// color_texture.offset.x = 0.5;
-// color_texture.offset.y = 0.5;
+color_texture.offset.x = 0.5;
+color_texture.offset.y = 0.5;
 
 
-// color_texture.rotation = Math.PI * 0.25;
-// // By default, rotation is around bottom left corner, but we can change it to set the rotation around the center face
-// color_texture.center.x = 0.5;
-// color_texture.center.y = 0.5;
+color_texture.rotation = Math.PI * 0.25;
+// By default, rotation is around bottom left corner, but we can change it to set the rotation around the center face
+color_texture.center.x = 0.5;
+color_texture.center.y = 0.5;
 
 // Three js use minification and magnification filter to render textures with lower quality when it can. And it is possible to change this behavior.
-// color_texture.minFilter = THREE.NearestFilter;
+color_texture.minFilter = THREE.NearestFilter;
 // If we use minFilter NearestFilter, we can desactivate the mipmaps
 // color_texture.generateMipmaps = false;
 color_texture.magFilter = THREE.NearestFilter;

@@ -33,9 +33,10 @@ const scene = new THREE.Scene()
         spaceship.scale.set(0.01, 0.01, 0.01)
         spaceship.rotation.y = Math.PI
         scene.add(spaceship)
+        console.log(spaceship)
     }
 )
-console.log(spaceship)
+// console.log(spaceship)
 
 /**
  * Textures

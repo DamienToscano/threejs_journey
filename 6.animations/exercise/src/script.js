@@ -66,7 +66,6 @@ const tick = () =>
     // ATTENTION : Do not use getDelta() function, it get things messes up
     const elapsed_time = clock.getElapsedTime();
 
-
     // Update Objects
 
     // mesh.position.x += 0.01;
@@ -74,12 +73,12 @@ const tick = () =>
     // mesh.rotation.y += 0.001 * delta_time;
     // mesh.rotation.x += 0.001 * delta_time;
 
-    mesh.rotation.x = elapsed_time;
-    mesh.rotation.y = elapsed_time;
+    // mesh.rotation.x = elapsed_time;
+    // mesh.rotation.y = elapsed_time;
     // Use sin and cos to make loop
     mesh.position.x = Math.cos(elapsed_time);
-    mesh.position.y = Math.sin(elapsed_time);
-    mesh.position.z = Math.cos(elapsed_time);
+    // mesh.position.y = Math.sin(elapsed_time);
+    // mesh.position.z = Math.cos(elapsed_time);
 
     // Make the render in the animation function
     renderer.render(scene, camera);

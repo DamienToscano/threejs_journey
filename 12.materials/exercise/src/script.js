@@ -132,8 +132,8 @@ const scene = new THREE.Scene()
 
 // Environment map is an image of what is surrounding the scene
 const material = new THREE.MeshStandardMaterial();
-material.metalness = 0.7;
-material.roughness = 0.2;
+material.metalness = 0;
+material.roughness = 0;
 material.envMap = environment_map_texture;
 
 
@@ -168,17 +168,24 @@ torus.position.x = 1.5;
 // Set uv2 attirubte to use aoMap param
 torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2));
 
-scene.add(sphere, plane, torus);
+// scene.add(sphere, plane, torus);
+
+const cube = new THREE.Mesh(
+    new THREE.BoxBufferGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial()
+);
+
+// scene.add(cube);
 
 /**
  * Lights
  */
 
-const ambient_light = new THREE.AmbientLight(0xffffff, 0.5);
-const point_light = new THREE.PointLight(0xffffff, 0.5);
+// const ambient_light = new THREE.AmbientLight(0xffffff, 0.5);
+const point_light = new THREE.PointLight('red', 0.5);
 point_light.position.set(2, 3, 4);
 
-scene.add(point_light, ambient_light);
+scene.add(cube, point_light/* , ambient_light */);
 
 /**
  * Sizes

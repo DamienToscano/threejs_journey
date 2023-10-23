@@ -40,7 +40,7 @@ fontLoader.load(
     {
         // Init geometry
         const text_geometry = new TextGeometry(
-            'Hello Three.js!',
+            'Hello Twitter!',
             {
                 font: font,
                 size: 0.5,
